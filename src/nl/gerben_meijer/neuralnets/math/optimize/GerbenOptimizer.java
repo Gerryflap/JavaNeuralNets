@@ -51,4 +51,7 @@ public class GerbenOptimizer {
         return (float) costFunction.apply(neuralNetwork.forwardPass(input), correct);
     }
 
+    public void setLearningRate(float learningRate) {
+        this.learningRate = learningRate;
+    }
 }

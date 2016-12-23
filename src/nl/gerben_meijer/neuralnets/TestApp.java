@@ -8,6 +8,7 @@ import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
+import nl.gerben_meijer.neuralnets.nn.layers.MultiplyLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.Softmax;
 
 /**
@@ -20,13 +21,10 @@ public class TestApp {
 
         NeuralNetwork nn = new NeuralNetwork();
 
-        nn.addLayer(new FullyConnectedLayer(100, 10));
+        nn.addLayer(new FullyConnectedLayer(100, 20));
         nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
-        nn.addLayer(new FullyConnectedLayer(10, 15));
-        nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
-
-        nn.addLayer(new FullyConnectedLayer(15, 1));
+        nn.addLayer(new FullyConnectedLayer(20, 1));
 
 
         float[][] inputData = new float[100][100];
@@ -56,13 +54,22 @@ public class TestApp {
             return total;
         };
 
-        GerbenOptimizer optimizer = new GerbenOptimizer(0.01f, nn, costFunction);
+        GerbenOptimizer optimizer = new GerbenOptimizer(0.1f, nn, costFunction);
         float cost = (float) costFunction.apply(nn.forwardPass(input), correct);
-        while (cost > 0.001) {
+        while (cost > 20) {
             optimizer.optimize(input, correct);
             cost = (float) costFunction.apply(nn.forwardPass(input), correct);
             System.out.println(cost);
         }
+
+        optimizer.setLearningRate(0.01f);
+
+        while (cost > 1) {
+            optimizer.optimize(input, correct);
+            cost = (float) costFunction.apply(nn.forwardPass(input), correct);
+            System.out.println(cost);
+        }
+
 
         System.out.println(nn.forwardPass(input));
 
