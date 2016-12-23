@@ -94,6 +94,24 @@ public class Matrix {
         return new Matrix(newData);
     }
 
+    public Matrix addAsVector(Matrix m) throws InvalidDimensionsException {
+        if (1 != m.width || this.height != m.height) {
+            throw new InvalidDimensionsException(String.format("Tried vec-adding matrices (%d, %d) and (%d, %d)",
+                    this.width, this.height,
+                    m.width, m.height));
+        }
+
+        float[][] newData = new float[this.height][this.width];
+
+        for (int i = 0; i < this.width; i++) {
+            for (int j = 0; j < this.height; j++) {
+                newData[j][i] = data[j][i] + m.getValue(0,j);
+            }
+        }
+
+        return new Matrix(newData);
+    }
+
     public Matrix mapFunction(Function f) {
         float[][] newData = new float[this.height][this.width];
 
@@ -169,4 +187,9 @@ public class Matrix {
             return null;
         }
     }
+
+    public void setValue(int x, int y, float value) {
+        data[y][x] = value;
+    }
+
 }

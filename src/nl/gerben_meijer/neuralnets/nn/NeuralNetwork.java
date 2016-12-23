@@ -3,6 +3,7 @@ package nl.gerben_meijer.neuralnets.nn;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.nn.layers.Layer;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +31,14 @@ public class NeuralNetwork {
 
     public List<Layer> getLayers() {
         return layers;
+    }
+
+    public Collection<Matrix> getFreeVariables() {
+        Collection<Matrix> collection = new LinkedList<>();
+        for (Layer layer: layers) {
+            collection.addAll(layer.getFreeVariables());
+        }
+        return collection;
     }
 
 }

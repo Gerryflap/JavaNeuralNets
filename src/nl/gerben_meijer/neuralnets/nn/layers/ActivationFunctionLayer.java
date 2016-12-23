@@ -3,6 +3,8 @@ package nl.gerben_meijer.neuralnets.nn.layers;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.Function;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,5 +20,10 @@ public class ActivationFunctionLayer implements Layer{
     @Override
     public Matrix forwardPass(Matrix input) {
         return input.mapFunction(function);
+    }
+
+    @Override
+    public Collection<Matrix> getFreeVariables() {
+        return new LinkedList<>();
     }
 }

@@ -5,6 +5,8 @@ import nl.gerben_meijer.neuralnets.math.functions.Function;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * Created by gerben on 23-12-16.
@@ -13,13 +15,7 @@ import java.util.Arrays;
 public class Softmax implements Layer{
     @Override
     public Matrix forwardPass(Matrix input) {
-
-        System.out.println(input);
-
         input = input.mapFunction(x -> (float) Math.exp(x));
-
-        System.out.println(input);
-
         float[][] data = new float[input.getHeight()][input.getWidth()];
         for (int x = 0; x < input.getWidth(); x++) {
 
@@ -29,7 +25,6 @@ public class Softmax implements Layer{
                 sum += input.getValue(x, y);
             }
 
-            System.out.println(sum);
 
             for (int y = 0; y < input.getHeight(); y++) {
                 data[y][x] = input.getValue(x, y)/sum;
@@ -41,5 +36,10 @@ public class Softmax implements Layer{
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public Collection<Matrix> getFreeVariables() {
+        return new LinkedList<>();
     }
 }
