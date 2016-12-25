@@ -10,9 +10,9 @@ import java.util.Random;
  */
 public class Matrix {
 
-    private float[][] data;
-    private int width;
-    private int height;
+    protected float[][] data;
+    protected int width;
+    protected int height;
 
     public static void main(String[] args) throws InvalidDimensionsException {
         Matrix m1 = new Matrix(new float[][]{

@@ -1,6 +1,7 @@
 package nl.gerben_meijer.neuralnets;
 
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import nl.gerben_meijer.neuralnets.math.MultiThreadMatrix;
 import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
@@ -32,13 +33,13 @@ public class TestApp {
             inputData[i][i] = 1;
         }
 
-        Matrix input = new Matrix(inputData);
+        Matrix input = new MultiThreadMatrix(inputData);
 
         float[][] correctOutput = new float[1][100];
         for (int i = 0; i < 100; i++) {
             correctOutput[0][i] = i;
         }
-        Matrix correct = new Matrix(correctOutput);
+        Matrix correct = new MultiThreadMatrix(correctOutput);
 
         CostFunction costFunction = (output, correct1) -> {
             Matrix diff = output.add(correct1.mapFunction(x -> -x)).mapFunction(x -> (float) Math.pow(x,2));
