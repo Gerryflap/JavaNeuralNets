@@ -15,6 +15,11 @@ import java.util.concurrent.ExecutionException;
  */
 public class MultiThreadMatrix extends Matrix {
 
+    public MultiThreadMatrix(Matrix m) throws InvalidDimensionsException {
+        super(m.data);
+
+    }
+
     public MultiThreadMatrix(int width, int height) {
         super(width, height);
     }
@@ -25,7 +30,7 @@ public class MultiThreadMatrix extends Matrix {
 
     public MultiThreadMatrix matmul(Matrix m) throws InvalidDimensionsException {
         if (width < 10) {
-            return (MultiThreadMatrix) super.matmul(m);
+            return new MultiThreadMatrix(super.matmul(m));
         }
         Matrix t = this.transpose();
 
@@ -66,7 +71,7 @@ public class MultiThreadMatrix extends Matrix {
     @Override
     public MultiThreadMatrix add(Matrix m) throws InvalidDimensionsException {
         if (width < 10) {
-            return (MultiThreadMatrix) super.add(m);
+            return new MultiThreadMatrix(super.add(m));
         }
         if (this.width != m.width || this.height != m.height) {
             throw new InvalidDimensionsException(String.format("Tried adding matrices (%d, %d) and (%d, %d)",
@@ -98,9 +103,13 @@ public class MultiThreadMatrix extends Matrix {
         return new MultiThreadMatrix(newData);
     }
 
-    public MultiThreadMatrix mapFunction(Function f) {
+    public MultiThreadMatrix mapFunction(Function f){
         if (width < 10) {
-            return (MultiThreadMatrix) super.mapFunction(f);
+            try {
+                return new MultiThreadMatrix(super.mapFunction(f));
+            } catch (InvalidDimensionsException e) {
+                e.printStackTrace();
+            }
         }
         float[][] newData = new float[this.height][this.width];
         Collection<Job> jobs = new LinkedList<>();

@@ -1,4 +1,4 @@
-package nl.gerben_meijer.neuralnets;
+package nl.gerben_meijer.neuralnets.examples;
 
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.MultiThreadMatrix;
@@ -6,6 +6,7 @@ import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
 import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
@@ -16,16 +17,16 @@ import nl.gerben_meijer.neuralnets.nn.layers.Softmax;
  * Created by gerben on 23-12-16.
  * Test application
  */
-public class TestApp {
+public class IndexExample {
 
     public static void main(String[] args) throws Matrix.InvalidDimensionsException {
 
         NeuralNetwork nn = new NeuralNetwork();
 
-        nn.addLayer(new FullyConnectedLayer(100, 20));
+        nn.addLayer(new FullyConnectedLayer(100, 3));
         nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
-        nn.addLayer(new FullyConnectedLayer(20, 1));
+        nn.addLayer(new FullyConnectedLayer(3, 1));
 
 
         float[][] inputData = new float[100][100];
@@ -55,14 +56,15 @@ public class TestApp {
             return total;
         };
 
-        GerbenOptimizer optimizer = new GerbenOptimizer(0.1f, nn, costFunction);
+        MultilearnRateOptimizer optimizer = new MultilearnRateOptimizer(0.3f, nn, costFunction);
         float cost = (float) costFunction.apply(nn.forwardPass(input), correct);
-        while (cost > 20) {
+        while (cost > 1) {
             optimizer.optimize(input, correct);
             cost = (float) costFunction.apply(nn.forwardPass(input), correct);
             System.out.println(cost);
         }
 
+        /**
         optimizer.setLearningRate(0.01f);
 
         while (cost > 1) {
@@ -70,6 +72,7 @@ public class TestApp {
             cost = (float) costFunction.apply(nn.forwardPass(input), correct);
             System.out.println(cost);
         }
+         **/
 
 
         System.out.println(nn.forwardPass(input));
