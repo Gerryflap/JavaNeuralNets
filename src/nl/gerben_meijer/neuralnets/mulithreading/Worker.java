@@ -42,13 +42,16 @@ public class Worker extends Thread{
 
     public void runJob(Job job, boolean restart) {
         this.job = job;
-        free = false;
+
         if (!restart) {
             try {
+                //System.out.println("Waiting for barrier");
                 barrier.await();
+                //System.out.println("Barrier released");
             } catch (InterruptedException | BrokenBarrierException e) {
                 e.printStackTrace();
             }
         }
+        free = false;
     }
 }

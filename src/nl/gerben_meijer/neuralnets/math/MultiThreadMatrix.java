@@ -130,6 +130,26 @@ public class MultiThreadMatrix extends Matrix {
         }
     }
 
+    @Override
+    public MultiThreadMatrix addAsVector(Matrix m) throws InvalidDimensionsException {
+        // TODO: Implement a job for this
+
+        if (1 != m.width || this.height != m.height) {
+            throw new InvalidDimensionsException(String.format("Tried vec-adding matrices (%d, %d) and (%d, %d)",
+                    this.width, this.height,
+                    m.width, m.height));
+        }
+
+        float[][] newData = new float[this.height][this.width];
+
+        for (int i = 0; i < this.width; i++) {
+            for (int j = 0; j < this.height; j++) {
+                newData[j][i] = data[j][i] + m.getValue(0,j);
+            }
+        }
+
+        return new MultiThreadMatrix(newData);
+    }
 
     private class MatrixMultJob extends Job<float[]> {
 
