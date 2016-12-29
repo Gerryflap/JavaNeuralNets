@@ -15,50 +15,62 @@ import java.util.Random;
 
 /**
  * Created by gerben on 27-12-16.
+ * This is a shitty example of tictactoe
  */
 public class TicTacToe {
 
-    float[] data = new float[9];
-    ArrayList<float[][]> p1moves = new ArrayList<>();
-    ArrayList<float[][]> p2moves = new ArrayList<>();
+    private float[] data = new float[9];
+    private ArrayList<float[][]> p1moves = new ArrayList<>();
+    private ArrayList<float[][]> p2moves = new ArrayList<>();
 
     public static void main(String[] args) {
         NeuralNetwork nn1 = new NeuralNetwork();
-        nn1.addLayer(new FullyConnectedLayer(9, 15));
+        nn1.addLayer(new FullyConnectedLayer(9, 9));
         nn1.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
-        nn1.addLayer(new FullyConnectedLayer(15, 9));
+        nn1.addLayer(new FullyConnectedLayer(9, 9));
+        nn1.addLayer(new ActivationFunctionLayer(new Sigmoid()));
+
+        nn1.addLayer(new FullyConnectedLayer(9, 9));
         nn1.addLayer(new Softmax());
 
         NeuralNetwork nn2 = new NeuralNetwork();
-        nn2.addLayer(new FullyConnectedLayer(9, 15));
+        nn2.addLayer(new FullyConnectedLayer(9, 5));
         nn2.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
-        nn2.addLayer(new FullyConnectedLayer(15, 9));
+        nn2.addLayer(new FullyConnectedLayer(5, 9));
         nn2.addLayer(new Softmax());
 
-        GerbenOptimizer optimizer1 = new GerbenOptimizer(0.01f, nn1, new SoftmaxRateCostFunction());
+        GerbenOptimizer optimizer1 = new GerbenOptimizer(0.0001f, nn1, new SoftmaxRateCostFunction());
         GerbenOptimizer optimizer2 = new GerbenOptimizer(0.01f, nn2, new SoftmaxRateCostFunction());
 
         Random random = new Random();
 
         float wins = 0;
         float games = 0;
+        int totalGames = 0;
+
+
+
+
         while (true) {
+            totalGames++;
+            boolean showGame = totalGames%1000 == 0;
+            int winner = 0;
             TicTacToe ticTacToe = new TicTacToe();
             int starting = random.nextInt(2) + 1;
             int player = starting;
             //System.out.printf("Starting player = %d\n", player);
 
-            boolean rnd = true;//random.nextBoolean();
+            boolean rnd = false;//random.nextBoolean();
 
             while (ticTacToe.getWinner() == 0 && !ticTacToe.isFull()) {
                 Matrix output;
                 if (player == 1) {
-                    output = nn1.forwardPass(ticTacToe.getBoard());
+                    output = nn1.forwardPass(ticTacToe.getNormalizedBoard(player));
                 } else {
                     if (!rnd) {
-                        output = nn2.forwardPass(ticTacToe.getBoard());
+                        output = nn2.forwardPass(ticTacToe.getNormalizedBoard(player));
                     } else {
                         output = Matrix.initRandom(1, 9);
                     }
@@ -68,22 +80,41 @@ public class TicTacToe {
                 int pos = 0;
 
                 for (int i = 0; i < 9; i++) {
-                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 10.0);
+                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 100000.0);
                     //System.out.printf("%3f  ", v);
-                    if (max < v && ticTacToe.isFree(i)) {
+                    if (max < v && (ticTacToe.isFree(i) )){ //&& rnd && player == 2)) {
                         max = v;
                         pos = i;
                     }
                 }
+
+                /*
+                if (!ticTacToe.isFree(pos)) {
+                    winner = player%2+1;
+                    break;
+                }
+                 //*/
 
                 //System.out.println();
 
                 ticTacToe.makeMove(player, pos);
 
                 player = player % 2 + 1;
+
+                if (showGame) {
+                    System.out.println(ticTacToe);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
 
-            int winner = ticTacToe.getWinner();
+            if (winner == 0) {
+                winner = ticTacToe.getWinner();
+            }
 
 
             if (ticTacToe.isFull()) {
@@ -104,8 +135,11 @@ public class TicTacToe {
 
             try {
                 Matrix[] winning = ticTacToe.getTrainingMatrices(winner);
-                optimizer1.optimize(winning[0], winning[1]);
-                optimizer2.optimize(winning[0], winning[1]);
+                //System.out.println(winning[0]);
+                final int w = winner;
+
+                optimizer1.optimize(winning[0].mapFunction(x -> x!=0?(x==w?1:-1):0), winning[1]);
+                optimizer2.optimize(winning[0].mapFunction(x -> x!=0?(x==w?1:-1):0), winning[1]);
 
             } catch (Matrix.InvalidDimensionsException e) {
                 e.printStackTrace();
@@ -195,11 +229,11 @@ public class TicTacToe {
 
         ArrayList<float[][]> trainDataList = player == 1?p1moves:p2moves;
 
-        float[][] inputs = new float[9][trainDataList.size()];
-        float[][] correct = new float[9][trainDataList.size()];
+        float[][] inputs = new float[trainDataList.size()][9];
+        float[][] correct = new float[trainDataList.size()][9];
         for (int i = 0; i < inputs.length; i++) {
-            inputs[i] = trainDataList.get(0)[0];
-            correct[i] = trainDataList.get(0)[1];
+            inputs[i] = trainDataList.get(i)[0];
+            correct[i] = trainDataList.get(i)[1];
         }
 
         Matrix[] out = new Matrix[]{
@@ -208,6 +242,11 @@ public class TicTacToe {
         };
         return out;
     }
+
+    public Matrix getNormalizedBoard(int player) {
+        return getBoard().mapFunction(x -> x!=0?(x==player?1:-1):0);
+    }
+
 
     @Override
     public String toString() {
