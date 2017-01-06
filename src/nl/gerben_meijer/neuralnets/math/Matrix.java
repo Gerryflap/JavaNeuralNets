@@ -2,13 +2,14 @@ package nl.gerben_meijer.neuralnets.math;
 
 import nl.gerben_meijer.neuralnets.math.functions.Function;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Created by gerben on 23-12-16.
  * Models a Matrix of floats
  */
-public class Matrix {
+public class Matrix implements Serializable {
 
     protected float[][] data;
     protected int width;
@@ -32,7 +33,7 @@ public class Matrix {
     }
 
     public Matrix(int width, int height) {
-        data = new float[width][height];
+        data = new float[height][width];
         this.width = width;
         this.height = height;
     }
@@ -190,6 +191,10 @@ public class Matrix {
 
     public void setValue(int x, int y, float value) {
         data[y][x] = value;
+    }
+
+    public float[][] getData() {
+        return data;
     }
 
 }

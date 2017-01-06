@@ -41,7 +41,7 @@ public class TicTacToe {
         nn2.addLayer(new FullyConnectedLayer(5, 9));
         nn2.addLayer(new Softmax());
 
-        GerbenOptimizer optimizer1 = new GerbenOptimizer(0.0001f, nn1, new SoftmaxRateCostFunction());
+        GerbenOptimizer optimizer1 = new GerbenOptimizer(0.001f, nn1, new SoftmaxRateCostFunction());
         GerbenOptimizer optimizer2 = new GerbenOptimizer(0.01f, nn2, new SoftmaxRateCostFunction());
 
         Random random = new Random();
@@ -62,7 +62,7 @@ public class TicTacToe {
             int player = starting;
             //System.out.printf("Starting player = %d\n", player);
 
-            boolean rnd = false;//random.nextBoolean();
+            boolean rnd = random.nextBoolean();
 
             while (ticTacToe.getWinner() == 0 && !ticTacToe.isFull()) {
                 Matrix output;

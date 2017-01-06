@@ -3,6 +3,7 @@ package nl.gerben_meijer.neuralnets.nn;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.nn.layers.Layer;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * Created by gerben on 23-12-16.
  * Models a neural network
  */
-public class NeuralNetwork {
+public class NeuralNetwork implements Serializable{
     private List<Layer> layers = new LinkedList<>();
 
     public NeuralNetwork() {
