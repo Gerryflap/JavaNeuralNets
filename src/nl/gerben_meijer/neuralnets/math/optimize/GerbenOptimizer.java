@@ -54,4 +54,8 @@ public class GerbenOptimizer {
     public void setLearningRate(float learningRate) {
         this.learningRate = learningRate;
     }
+
+    public float getLearningRate() {
+        return learningRate;
+    }
 }

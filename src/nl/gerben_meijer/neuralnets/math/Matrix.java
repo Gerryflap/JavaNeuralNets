@@ -52,6 +52,17 @@ public class Matrix implements Serializable {
         }
     }
 
+    public static float[][] toFloats(int[][] array) {
+        float[][] data = new float[array.length][];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = new float[array[i].length];
+            for (int j = 0; j < data[i].length; j++) {
+                data[i][j] = array[i][j];
+            }
+        }
+        return data;
+    }
+
     public float getValue(int x, int y) {
         return data[y][x];
     }
@@ -196,5 +207,18 @@ public class Matrix implements Serializable {
     public float[][] getData() {
         return data;
     }
+
+    public Matrix addColumns(Matrix m) throws InvalidDimensionsException {
+        if (m.getHeight() != height) {
+            throw new InvalidDimensionsException();
+        }
+        float[][] newData = new float[height][width + m.width];
+        for (int i = 0; i < height; i++) {
+            System.arraycopy(data[i], 0, newData[i], 0, data[i].length);
+            System.arraycopy(m.data[i], 0, newData[i], data[i].length, m.data[i].length);
+        }
+
+        return new Matrix(newData);
+     }
 
 }

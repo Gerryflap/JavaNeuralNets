@@ -7,13 +7,14 @@ import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 /**
  * Created by gerben on 23-12-16.
  */
-public class MultilearnRateOptimizer {
+public class MomentumMultilearnRateOptimizer {
 
     private float learningRate;
     private NeuralNetwork neuralNetwork;
     private CostFunction costFunction;
+    private int[] learnRateCount = new int[3];
 
-    public MultilearnRateOptimizer(float learningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
+    public MomentumMultilearnRateOptimizer(float learningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
         this.learningRate = learningRate;
         this.neuralNetwork = neuralNetwork;
         this.costFunction = costFunction;
@@ -31,21 +32,37 @@ public class MultilearnRateOptimizer {
                     float normal = m.getValue(x, y);
 
                     for (int i = -1; i < 2; i++) {
-                        for (int expon = -2; i==0?expon < -1 : expon < 1; expon++) {
-                            float pow = (float) Math.pow(10, expon);
+                        int lowestExpon = 0;
+                        for (int expon = -1; i==0?expon < 0 : expon < 2; expon++) {
+                            float pow = (float) Math.pow(2, expon);
                             float value = normal + i * pow * learningRate;
                             m.setValue(x, y, value);
                             float cost = rateNetwork(inputBatch, correctBatch);
                             if (cost < lowestCost) {
                                 lowestCost = cost;
                                 lowestValue = value;
+                                lowestExpon = expon;
                             }
                             m.setValue(x, y, lowestValue);
+                            learnRateCount[lowestExpon + 1] += 1;
                         }
                     }
                 }
             }
         }
+
+
+        int bestRate = 1;
+        int highestUses = 0;
+        for (int i = 0; i < 3; i++) {
+            if (highestUses < learnRateCount[i]) {
+                bestRate = i;
+                highestUses = learnRateCount[i];
+            }
+        }
+
+        learningRate *= Math.pow(2, bestRate-1);
+        learnRateCount = new int[3];
     }
 
     private float rateNetwork(Matrix input, Matrix correct) throws Matrix.InvalidDimensionsException {

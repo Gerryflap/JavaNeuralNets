@@ -4,6 +4,7 @@ import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
 import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.MomentumMultilearnRateOptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
@@ -41,7 +42,7 @@ public class TicTacToe {
         nn2.addLayer(new FullyConnectedLayer(5, 9));
         nn2.addLayer(new Softmax());
 
-        GerbenOptimizer optimizer1 = new GerbenOptimizer(0.001f, nn1, new SoftmaxRateCostFunction());
+        MomentumMultilearnRateOptimizer optimizer1 = new MomentumMultilearnRateOptimizer(0.001f, nn1, new SoftmaxRateCostFunction());
         GerbenOptimizer optimizer2 = new GerbenOptimizer(0.01f, nn2, new SoftmaxRateCostFunction());
 
         Random random = new Random();
@@ -80,7 +81,7 @@ public class TicTacToe {
                 int pos = 0;
 
                 for (int i = 0; i < 9; i++) {
-                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 100000.0);
+                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 100.0);
                     //System.out.printf("%3f  ", v);
                     if (max < v && (ticTacToe.isFree(i) )){ //&& rnd && player == 2)) {
                         max = v;
