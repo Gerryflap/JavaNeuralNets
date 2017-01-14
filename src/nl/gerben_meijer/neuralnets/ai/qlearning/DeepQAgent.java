@@ -3,6 +3,7 @@ package nl.gerben_meijer.neuralnets.ai.qlearning;
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.MomentumMultilearnRateOptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
@@ -22,7 +23,7 @@ public class DeepQAgent {
     private Random random = new Random();
     private State currentState;
     private Map<Action, Integer> possibleActions;
-    private MomentumMultilearnRateOptimizer optimizer;
+    private IMMROptimizer optimizer;
     private LinkedList<Matrix[]> replayMemory = new LinkedList<>();
     private QCostFunction costFunction = new QCostFunction();
     private float dropoff;
@@ -38,7 +39,7 @@ public class DeepQAgent {
         this.explorationChance = explorationChance;
 
         this.neuralNetwork = neuralNetwork;
-        optimizer = new MomentumMultilearnRateOptimizer(learnrate, neuralNetwork, costFunction);
+        optimizer = new IMMROptimizer(learnrate, learnrate/100.0f, neuralNetwork, costFunction);
 
 
         //Forward pass the current state to test the network dimensions
