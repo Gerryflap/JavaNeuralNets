@@ -6,9 +6,7 @@ import nl.gerben_meijer.neuralnets.math.MultiThreadMatrix;
 import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
-import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.*;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
@@ -25,40 +23,32 @@ public class IndexExample {
 
         NeuralNetwork nn = new NeuralNetwork();
 
-        nn.addLayer(new FullyConnectedLayer(100, 3));
+        nn.addLayer(new FullyConnectedLayer(50, 10));
         nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
-        nn.addLayer(new FullyConnectedLayer(3, 1));
+
+        nn.addLayer(new FullyConnectedLayer(10, 1));
 
 
-        float[][] inputData = new float[100][100];
+        float[][] inputData = new float[50][50];
         for (int i = 0; i < inputData.length; i++) {
             inputData[i][i] = 1;
         }
 
         Matrix input = new MultiThreadMatrix(inputData);
 
-        float[][] correctOutput = new float[1][100];
-        for (int i = 0; i < 100; i++) {
+        float[][] correctOutput = new float[1][50];
+        for (int i = 0; i < 50; i++) {
             correctOutput[0][i] = i;
         }
         Matrix correct = new MultiThreadMatrix(correctOutput);
 
         CostFunction costFunction = (output, correct1) -> {
-            Matrix diff = output.add(correct1.mapFunction(x -> -x)).mapFunction(x -> (float) Math.pow(x,2));
-            double total = 0.0;
-            for (int depth = 0; depth < diff.getWidth(); depth++) {
-                double cost = 0.0;
-                for (int i = 0; i < diff.getHeight(); i++) {
-                    cost += diff.getValue(depth, i);
-                }
-                total += cost;
-            }
-
-            return total;
+            Matrix diff = output.add(correct1.mapFunction(x -> -x)).mapFunction(x -> x*x);
+            return diff.sum();
         };
 
-        IMMROptimizer optimizer = new IMMROptimizer(0.5f, 0.00001f, nn, costFunction);
+        Optimizer optimizer = new GerbenOptimizer(0.05f, nn, costFunction);
         float cost = (float) costFunction.apply(nn.forwardPass(input), correct);
         while (cost > 1) {
             optimizer.optimize(input, correct);

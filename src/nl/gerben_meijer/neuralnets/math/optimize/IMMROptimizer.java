@@ -13,11 +13,9 @@ import java.util.Iterator;
  *
  * Has an individual learnrate for every weight.
  */
-public class IMMROptimizer implements Optimizer{
+public class IMMROptimizer extends Optimizer{
 
     private Matrix[] learningRates;
-    private NeuralNetwork neuralNetwork;
-    private CostFunction costFunction;
     private double maxLearningRate;
     private double minLearningRate;
 
@@ -34,7 +32,7 @@ public class IMMROptimizer implements Optimizer{
         this.minLearningRate = minLearningRate;
     }
 
-    public void optimize(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
+    public void optimizeNN(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
 
         Iterator<Matrix> iterator = neuralNetwork.getFreeVariables().iterator();
         for (int index = 0; index < neuralNetwork.getFreeVariables().size(); index++) {
@@ -49,7 +47,7 @@ public class IMMROptimizer implements Optimizer{
                     for (int i = -1; i < 2; i++) {
 
                         for (int expon = -1; i==0?expon < 0 : expon < 2; expon++) {
-                            float pow = (float) Math.pow(2, expon);
+                            float pow = (float) Math.pow(1.1, expon);
                             float value = normal + i * pow * learningRates[index].getValue(x, y);
                             m.setValue(x, y, value);
                             float cost = rateNetwork(inputBatch, correctBatch);
@@ -67,7 +65,7 @@ public class IMMROptimizer implements Optimizer{
                     m.setValue(x, y, lowestValue);
                     learningRates[index].setValue(x, y,
                             (float) Math.max(minLearningRate, Math.min(maxLearningRate,
-                                    (learningRates[index].getValue(x, y)* Math.pow(2, lowestExpon))
+                                    (learningRates[index].getValue(x, y)* Math.pow(1.1, lowestExpon))
                             ))
                     );
                 }

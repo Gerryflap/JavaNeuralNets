@@ -2,10 +2,13 @@ package nl.gerben_meijer.neuralnets.examples.QExample;
 
 import nl.gerben_meijer.neuralnets.ai.qlearning.Action;
 import nl.gerben_meijer.neuralnets.ai.qlearning.DeepQAgent;
+import nl.gerben_meijer.neuralnets.ai.qlearning.QCostFunction;
 import nl.gerben_meijer.neuralnets.ai.qlearning.State;
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
+import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
 import nl.gerben_meijer.neuralnets.mulithreading.ThreadPool;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
@@ -21,6 +24,7 @@ import java.util.List;
  */
 public class QExample {
     public static final List<Action> POSSIBLE_ACTIONS = new ArrayList<Action>();
+    public static final int SIZE = 5;
     static {
         POSSIBLE_ACTIONS.add(new QAction(1,0));
         POSSIBLE_ACTIONS.add(new QAction(-1,0));
@@ -32,17 +36,19 @@ public class QExample {
 
 
         NeuralNetwork nn = new NeuralNetwork();
-        nn.addLayer(new FullyConnectedLayer(100,2));
+        nn.addLayer(new FullyConnectedLayer(SIZE*SIZE,5));
         //nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
-        nn.addLayer(new FullyConnectedLayer(2,5));
+        nn.addLayer(new FullyConnectedLayer(5,4));
         nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
 
-        nn.addLayer(new FullyConnectedLayer(5,4));
+        nn.addLayer(new FullyConnectedLayer(4,4));
 
-        DeepQAgent agent = new DeepQAgent(nn, new QState(4,4, 0, 0), POSSIBLE_ACTIONS,
-                0.8f, 0.5f, 0.00001f, 0.05f);
+        DeepQAgent agent = new DeepQAgent(nn,
+                new GerbenOptimizer(0.00001f, nn, new QCostFunction()),
+                new QState(0,0, 0, 0), POSSIBLE_ACTIONS,
+                0.8f,  0.1f);
 
         while (true) {
             QAction actionDone = (QAction) agent.chooseAction();
@@ -50,10 +56,10 @@ public class QExample {
             System.out.printf("Agent chose (%d, %d), now at (%d, %d)\n",
                     actionDone.dx, actionDone.dy,
                     agentState.x, agentState.y);
-            for (int y = 0; y < 10; y++) {
-                for (int x = 0; x < 10; x++) {
+            for (int y = 0; y < SIZE; y++) {
+                for (int x = 0; x < SIZE; x++) {
                     QState state = new QState(x, y, 0, 0);
-                    System.out.printf("%f\t", agent.getQ(state));
+                    System.out.printf("%.2f\t", agent.getQ(state));
                 }
                 System.out.println();
             }

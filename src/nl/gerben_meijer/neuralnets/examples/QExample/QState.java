@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static nl.gerben_meijer.neuralnets.examples.QExample.QExample.SIZE;
+
 /**
  * Created by gerben on 13-1-17.
  */
@@ -26,8 +28,8 @@ public class QState implements State {
 
     @Override
     public float[] toNetworkInput() {
-        float[] out = new float[10*10];
-        out[x+y*10] = 1;
+        float[] out = new float[SIZE*SIZE];
+        out[x+y*SIZE] = 1;
 
         //float[] out = new float[]{x,y};
         return out;
@@ -36,7 +38,7 @@ public class QState implements State {
     @Override
     public State applyAction(Action a) {
         if (x == 4 && y == 4) {
-            return new QState(random.nextInt(10),random.nextInt(10), 0,0);
+            return new QState(random.nextInt(SIZE),random.nextInt(SIZE), 0,0);
         }
         QAction action = (QAction) a;
         int x = this.x + action.dx;
@@ -49,11 +51,11 @@ public class QState implements State {
     public float getReward() {
 
 
-        if (x == 4 && y == 4) {
-            return 100000f;
+        if (x == SIZE/2 && y == SIZE/2) {
+            return 100f;
 
-        } else if ((x == 9 || x == 0) && (y == 9 || y == 0)) {
-            return -10000f;
+        } else if ((x == SIZE-1 || x == 0) && (y == SIZE-1 || y == 0)) {
+            return -10f;
         } else {
             return 0;
         }
@@ -65,7 +67,7 @@ public class QState implements State {
         for (int i = 0; i < QExample.POSSIBLE_ACTIONS.size(); i++) {
             QAction action = (QAction) QExample.POSSIBLE_ACTIONS.get(i);
 
-            if (x + action.dx <= 9 && x + action.dx >= 0 && y + action.dy <= 9 && y + action.dy >= 0 &&
+            if (x + action.dx < SIZE && x + action.dx >= 0 && y + action.dy < SIZE && y + action.dy >= 0 &&
                     (this.dx != -action.dx || this.dy != -action.dy) ) {
                 actions.add(action);
             }

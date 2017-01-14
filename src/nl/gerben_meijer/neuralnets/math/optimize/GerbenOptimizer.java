@@ -10,11 +10,9 @@ import java.util.Collection;
 /**
  * Created by gerben on 23-12-16.
  */
-public class GerbenOptimizer implements Optimizer{
+public class GerbenOptimizer extends Optimizer{
 
     private float learningRate;
-    private NeuralNetwork neuralNetwork;
-    private CostFunction costFunction;
 
     public GerbenOptimizer(float learningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
         this.learningRate = learningRate;
@@ -22,7 +20,7 @@ public class GerbenOptimizer implements Optimizer{
         this.costFunction = costFunction;
     }
 
-    public void optimize(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
+    public void optimizeNN(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
 
         for (Matrix m :
                 neuralNetwork.getFreeVariables()) {

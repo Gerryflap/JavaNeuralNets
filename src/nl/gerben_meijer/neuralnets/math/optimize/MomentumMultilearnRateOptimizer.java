@@ -8,11 +8,9 @@ import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 /**
  * Created by gerben on 23-12-16.
  */
-public class MomentumMultilearnRateOptimizer implements Optimizer {
+public class MomentumMultilearnRateOptimizer extends Optimizer {
 
     private float learningRate;
-    private NeuralNetwork neuralNetwork;
-    private CostFunction costFunction;
     private int[] learnRateCount = new int[3];
     private double originalLearningrate;
 
@@ -23,7 +21,7 @@ public class MomentumMultilearnRateOptimizer implements Optimizer {
         this.originalLearningrate = learningRate;
     }
 
-    public void optimize(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
+    public void optimizeNN(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
 
         for (Matrix m :
                 neuralNetwork.getFreeVariables()) {
@@ -44,7 +42,9 @@ public class MomentumMultilearnRateOptimizer implements Optimizer {
                             if (cost < lowestCost) {
                                 lowestCost = cost;
                                 lowestValue = value;
-                                lowestExpon = expon;
+                                if (i!=0) {
+                                    lowestExpon = expon;
+                                }
                             }
 
                         }

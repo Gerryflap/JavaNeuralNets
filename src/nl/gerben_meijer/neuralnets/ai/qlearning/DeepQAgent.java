@@ -2,10 +2,7 @@ package nl.gerben_meijer.neuralnets.ai.qlearning;
 
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
-import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.MomentumMultilearnRateOptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.*;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 
 import java.util.*;
@@ -23,13 +20,12 @@ public class DeepQAgent {
     private Random random = new Random();
     private State currentState;
     private Map<Action, Integer> possibleActions;
-    private IMMROptimizer optimizer;
+    private Optimizer optimizer;
     private LinkedList<Matrix[]> replayMemory = new LinkedList<>();
-    private QCostFunction costFunction = new QCostFunction();
     private float dropoff;
 
-    public DeepQAgent(NeuralNetwork neuralNetwork, State initialState, List<Action> possibleActions,
-                      float dropoff, float maxLearnrate, float minLearnRate, float explorationChance) throws InvalidDimensionsException {
+    public DeepQAgent(NeuralNetwork neuralNetwork, Optimizer optimizer, State initialState, List<Action> possibleActions,
+                      float dropoff, float explorationChance) throws InvalidDimensionsException {
         currentState = initialState;
         this.possibleActions = new HashMap<>();
         for (int i = 0; i < possibleActions.size(); i++) {
@@ -39,7 +35,7 @@ public class DeepQAgent {
         this.explorationChance = explorationChance;
 
         this.neuralNetwork = neuralNetwork;
-        optimizer = new IMMROptimizer(maxLearnrate, minLearnRate, neuralNetwork, costFunction);
+        this.optimizer = optimizer;
 
 
         //Forward pass the current state to test the network dimensions
@@ -134,7 +130,7 @@ public class DeepQAgent {
         try {
             Matrix in = new Matrix(inpData).transpose();
             Matrix correct = new Matrix(correctData).transpose();
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 10; i++) {
                 optimizer.optimize(in, correct);
             }
 

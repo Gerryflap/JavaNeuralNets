@@ -6,7 +6,9 @@ import nl.gerben_meijer.neuralnets.math.MultiThreadMatrix;
 import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
+import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.Optimizer;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
@@ -41,7 +43,7 @@ public class XorExample {
 
 
         CostFunction costFunction = new SoftmaxRateCostFunction();
-        MultilearnRateOptimizer optimizer = new MultilearnRateOptimizer(0.3f, nn, costFunction);
+        Optimizer optimizer = new IMMROptimizer(0.2f, 0.00001f, nn, costFunction);
         float cost = (float) costFunction.apply(nn.forwardPass(input), correct);
         while (cost > 0.0000000001) {
             optimizer.optimize(input, correct);
