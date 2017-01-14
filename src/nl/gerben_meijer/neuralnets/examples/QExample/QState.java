@@ -37,7 +37,7 @@ public class QState implements State {
 
     @Override
     public State applyAction(Action a) {
-        if (x == 4 && y == 4) {
+        if (x == SIZE/2 && y == SIZE/2) {
             return new QState(random.nextInt(SIZE),random.nextInt(SIZE), 0,0);
         }
         QAction action = (QAction) a;

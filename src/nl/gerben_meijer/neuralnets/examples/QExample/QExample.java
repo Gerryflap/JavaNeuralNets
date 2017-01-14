@@ -46,7 +46,7 @@ public class QExample {
         nn.addLayer(new FullyConnectedLayer(4,4));
 
         DeepQAgent agent = new DeepQAgent(nn,
-                new GerbenOptimizer(0.00001f, nn, new QCostFunction()),
+                new GerbenOptimizer(0.0001f, nn, new QCostFunction()),
                 new QState(0,0, 0, 0), POSSIBLE_ACTIONS,
                 0.8f,  0.1f);
 
