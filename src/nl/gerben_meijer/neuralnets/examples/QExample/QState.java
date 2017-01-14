@@ -26,10 +26,10 @@ public class QState implements State {
 
     @Override
     public float[] toNetworkInput() {
-        //float[] out = new float[10*10];
-        //out[x+y*10] = 1;
+        float[] out = new float[10*10];
+        out[x+y*10] = 1;
 
-        float[] out = new float[]{x,y};
+        //float[] out = new float[]{x,y};
         return out;
     }
 
@@ -48,14 +48,12 @@ public class QState implements State {
     @Override
     public float getReward() {
 
-        int offset = 0;
 
+        if (x == 4 && y == 4) {
+            return 100000f;
 
-        if (x>9 - offset || y>9 - offset || x<offset || y<offset) {
-            //return (float) -Math.pow((x-4)*(x-4) + (y-4)*(y-4), 2);
-            return -0.01f;
-        } else if (x == 4 && y == 4) {
-            return 1000f;
+        } else if ((x == 9 || x == 0) && (y == 9 || y == 0)) {
+            return -10000f;
         } else {
             return 0;
         }

@@ -8,7 +8,7 @@ import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 /**
  * Created by gerben on 23-12-16.
  */
-public class MomentumMultilearnRateOptimizer {
+public class MomentumMultilearnRateOptimizer implements Optimizer {
 
     private float learningRate;
     private NeuralNetwork neuralNetwork;
@@ -33,9 +33,9 @@ public class MomentumMultilearnRateOptimizer {
                     float lowestValue = 0.0f;
 
                     float normal = m.getValue(x, y);
-
+                    int lowestExpon = 0;
                     for (int i = -1; i < 2; i++) {
-                        int lowestExpon = 0;
+
                         for (int expon = -1; i==0?expon < 0 : expon < 2; expon++) {
                             float pow = (float) Math.pow(2, expon);
                             float value = normal + i * pow * learningRate;
@@ -46,10 +46,13 @@ public class MomentumMultilearnRateOptimizer {
                                 lowestValue = value;
                                 lowestExpon = expon;
                             }
-                            m.setValue(x, y, lowestValue);
-                            learnRateCount[lowestExpon + 1] += 1;
+
                         }
+
+
                     }
+                    m.setValue(x, y, lowestValue);
+                    learnRateCount[lowestExpon + 1] += 1;
                 }
             }
         }

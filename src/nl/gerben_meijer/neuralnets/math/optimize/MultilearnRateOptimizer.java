@@ -8,7 +8,7 @@ import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 /**
  * Created by gerben on 23-12-16.
  */
-public class MultilearnRateOptimizer {
+public class MultilearnRateOptimizer implements Optimizer{
 
     private float learningRate;
     private NeuralNetwork neuralNetwork;
@@ -41,9 +41,10 @@ public class MultilearnRateOptimizer {
                                 lowestCost = cost;
                                 lowestValue = value;
                             }
-                            m.setValue(x, y, lowestValue);
+
                         }
                     }
+                    m.setValue(x, y, lowestValue);
                 }
             }
         }

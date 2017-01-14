@@ -13,7 +13,7 @@ import java.util.Iterator;
  *
  * Has an individual learnrate for every weight.
  */
-public class IMMROptimizer {
+public class IMMROptimizer implements Optimizer{
 
     private Matrix[] learningRates;
     private NeuralNetwork neuralNetwork;
@@ -45,9 +45,9 @@ public class IMMROptimizer {
                     float lowestValue = 0.0f;
 
                     float normal = m.getValue(x, y);
-
+                    int lowestExpon = 0;
                     for (int i = -1; i < 2; i++) {
-                        int lowestExpon = 0;
+
                         for (int expon = -1; i==0?expon < 0 : expon < 2; expon++) {
                             float pow = (float) Math.pow(2, expon);
                             float value = normal + i * pow * learningRates[index].getValue(x, y);
@@ -56,16 +56,20 @@ public class IMMROptimizer {
                             if (cost < lowestCost) {
                                 lowestCost = cost;
                                 lowestValue = value;
-                                lowestExpon = expon;
+                                if (i != 0) {
+                                    lowestExpon = expon;
+                                }
                             }
-                            m.setValue(x, y, lowestValue);
-                            learningRates[index].setValue(x, y,
-                                    (float) Math.max(minLearningRate, Math.min(maxLearningRate,
-                                            (learningRates[index].getValue(x, y)* Math.pow(2, lowestExpon))
-                                    ))
-                            );
+
                         }
+
                     }
+                    m.setValue(x, y, lowestValue);
+                    learningRates[index].setValue(x, y,
+                            (float) Math.max(minLearningRate, Math.min(maxLearningRate,
+                                    (learningRates[index].getValue(x, y)* Math.pow(2, lowestExpon))
+                            ))
+                    );
                 }
             }
         }

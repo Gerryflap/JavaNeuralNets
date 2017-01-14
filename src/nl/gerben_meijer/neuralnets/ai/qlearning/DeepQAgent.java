@@ -29,7 +29,7 @@ public class DeepQAgent {
     private float dropoff;
 
     public DeepQAgent(NeuralNetwork neuralNetwork, State initialState, List<Action> possibleActions,
-                      float dropoff, float learnrate, float explorationChance) throws InvalidDimensionsException {
+                      float dropoff, float maxLearnrate, float minLearnRate, float explorationChance) throws InvalidDimensionsException {
         currentState = initialState;
         this.possibleActions = new HashMap<>();
         for (int i = 0; i < possibleActions.size(); i++) {
@@ -39,7 +39,7 @@ public class DeepQAgent {
         this.explorationChance = explorationChance;
 
         this.neuralNetwork = neuralNetwork;
-        optimizer = new IMMROptimizer(learnrate, learnrate/100.0f, neuralNetwork, costFunction);
+        optimizer = new IMMROptimizer(maxLearnrate, minLearnRate, neuralNetwork, costFunction);
 
 
         //Forward pass the current state to test the network dimensions
@@ -132,8 +132,10 @@ public class DeepQAgent {
             correctData[i] = replayMemory.get(i)[1].transpose().getData()[0];
         }
         try {
-            for (int i = 0; i < 100; i++) {
-                optimizer.optimize(new Matrix(inpData).transpose(), new Matrix(correctData).transpose());
+            Matrix in = new Matrix(inpData).transpose();
+            Matrix correct = new Matrix(correctData).transpose();
+            for (int i = 0; i < 1000; i++) {
+                optimizer.optimize(in, correct);
             }
 
         } catch (InvalidDimensionsException e) {
@@ -149,7 +151,16 @@ public class DeepQAgent {
 
     public float getQ(State state) {
         try {
-            return neuralNetwork.forwardPass(new Matrix(new float[][]{state.toNetworkInput()}).transpose()).max();
+            Matrix out = neuralNetwork.forwardPass(new Matrix(new float[][]{state.toNetworkInput()}).transpose());
+            float max = -Float.MAX_VALUE;
+            for (Action action :
+                    state.getPossibleActions()) {
+                float score = out.getValue(0, possibleActions.get(action));
+                if (score > max) {
+                    max = score;
+                }
+            }
+            return max;
         } catch (InvalidDimensionsException e) {
             e.printStackTrace();
         }

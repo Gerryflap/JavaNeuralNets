@@ -7,6 +7,7 @@ import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
 import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
+import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
@@ -57,12 +58,13 @@ public class IndexExample {
             return total;
         };
 
-        MultilearnRateOptimizer optimizer = new MultilearnRateOptimizer(0.3f, nn, costFunction);
+        IMMROptimizer optimizer = new IMMROptimizer(0.5f, 0.00001f, nn, costFunction);
         float cost = (float) costFunction.apply(nn.forwardPass(input), correct);
         while (cost > 1) {
             optimizer.optimize(input, correct);
             cost = (float) costFunction.apply(nn.forwardPass(input), correct);
             System.out.println(cost);
+            //System.out.println(optimizer.getLearningRates()[0]);
         }
 
         /**

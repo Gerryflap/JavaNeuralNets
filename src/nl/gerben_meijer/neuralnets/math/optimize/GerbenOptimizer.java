@@ -10,7 +10,7 @@ import java.util.Collection;
 /**
  * Created by gerben on 23-12-16.
  */
-public class GerbenOptimizer {
+public class GerbenOptimizer implements Optimizer{
 
     private float learningRate;
     private NeuralNetwork neuralNetwork;

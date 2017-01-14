@@ -11,7 +11,7 @@ public class QCostFunction implements CostFunction {
 
     @Override
     public double apply(Matrix output, Matrix correct) throws InvalidDimensionsException {
-        double cost = output.add(correct.mapFunction(x->-x)).mapFunction(x->x*x).sum();
+        double cost = output.add(correct.mapFunction(x->-x)).mapFunction(x-> (float) Math.log(Math.abs(x))).sum();
         return cost;
     }
 

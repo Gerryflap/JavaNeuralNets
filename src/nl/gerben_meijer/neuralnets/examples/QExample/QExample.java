@@ -32,13 +32,17 @@ public class QExample {
 
 
         NeuralNetwork nn = new NeuralNetwork();
-        nn.addLayer(new FullyConnectedLayer(2,5, 0));
+        nn.addLayer(new FullyConnectedLayer(100,2));
+        //nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
+
+        nn.addLayer(new FullyConnectedLayer(2,5));
         nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
 
 
-        nn.addLayer(new FullyConnectedLayer(5,4, 0));
+        nn.addLayer(new FullyConnectedLayer(5,4));
 
-        DeepQAgent agent = new DeepQAgent(nn, new QState(3,4, 0, 0), POSSIBLE_ACTIONS, 0.8f, 0.01f, 0.3f);
+        DeepQAgent agent = new DeepQAgent(nn, new QState(4,4, 0, 0), POSSIBLE_ACTIONS,
+                0.8f, 0.5f, 0.00001f, 0.05f);
 
         while (true) {
             QAction actionDone = (QAction) agent.chooseAction();
