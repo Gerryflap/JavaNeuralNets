@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.math.optimize;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
@@ -13,14 +14,16 @@ public class MomentumMultilearnRateOptimizer {
     private NeuralNetwork neuralNetwork;
     private CostFunction costFunction;
     private int[] learnRateCount = new int[3];
+    private double originalLearningrate;
 
     public MomentumMultilearnRateOptimizer(float learningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
         this.learningRate = learningRate;
         this.neuralNetwork = neuralNetwork;
         this.costFunction = costFunction;
+        this.originalLearningrate = learningRate;
     }
 
-    public void optimize(Matrix inputBatch, Matrix correctBatch) throws Matrix.InvalidDimensionsException {
+    public void optimize(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
 
         for (Matrix m :
                 neuralNetwork.getFreeVariables()) {
@@ -61,11 +64,15 @@ public class MomentumMultilearnRateOptimizer {
             }
         }
 
-        learningRate *= Math.pow(2, bestRate-1);
+        //System.out.printf("Rates: %d, %d, %d. Bestrate = %d\n", learnRateCount[0], learnRateCount[1], learnRateCount[2], bestRate);
+        double newLearningRate = learningRate * Math.pow(2, bestRate-1);
+        if (newLearningRate <= originalLearningrate) {
+            learningRate = (float) newLearningRate;
+        }
         learnRateCount = new int[3];
     }
 
-    private float rateNetwork(Matrix input, Matrix correct) throws Matrix.InvalidDimensionsException {
+    private float rateNetwork(Matrix input, Matrix correct) throws InvalidDimensionsException {
         return (float) costFunction.apply(neuralNetwork.forwardPass(input), correct);
     }
 

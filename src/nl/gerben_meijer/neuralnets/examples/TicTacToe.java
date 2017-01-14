@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.examples;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
@@ -142,7 +143,7 @@ public class TicTacToe {
                 optimizer1.optimize(winning[0].mapFunction(x -> x!=0?(x==w?1:-1):0), winning[1]);
                 optimizer2.optimize(winning[0].mapFunction(x -> x!=0?(x==w?1:-1):0), winning[1]);
 
-            } catch (Matrix.InvalidDimensionsException e) {
+            } catch (InvalidDimensionsException e) {
                 e.printStackTrace();
             }
 
@@ -223,7 +224,7 @@ public class TicTacToe {
 
     }
 
-    public Matrix[] getTrainingMatrices(int player) throws Matrix.InvalidDimensionsException {
+    public Matrix[] getTrainingMatrices(int player) throws InvalidDimensionsException {
         if (player == 0) {
             return null;
         }
@@ -267,7 +268,7 @@ public class TicTacToe {
         Matrix board = null;
         try {
             board = new Matrix(new float[][]{data}).transpose();
-        } catch (Matrix.InvalidDimensionsException e) {
+        } catch (InvalidDimensionsException e) {
             e.printStackTrace();
         }
 

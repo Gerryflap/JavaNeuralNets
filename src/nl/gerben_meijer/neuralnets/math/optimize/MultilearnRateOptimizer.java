@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.math.optimize;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
@@ -19,7 +20,7 @@ public class MultilearnRateOptimizer {
         this.costFunction = costFunction;
     }
 
-    public void optimize(Matrix inputBatch, Matrix correctBatch) throws Matrix.InvalidDimensionsException {
+    public void optimize(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
 
         for (Matrix m :
                 neuralNetwork.getFreeVariables()) {
@@ -48,7 +49,7 @@ public class MultilearnRateOptimizer {
         }
     }
 
-    private float rateNetwork(Matrix input, Matrix correct) throws Matrix.InvalidDimensionsException {
+    private float rateNetwork(Matrix input, Matrix correct) throws InvalidDimensionsException {
         return (float) costFunction.apply(neuralNetwork.forwardPass(input), correct);
     }
 

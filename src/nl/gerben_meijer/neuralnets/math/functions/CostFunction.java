@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.math.functions;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 
 /**
@@ -8,6 +9,6 @@ import nl.gerben_meijer.neuralnets.math.Matrix;
  */
 public interface CostFunction {
 
-    double apply(Matrix output, Matrix correct) throws Matrix.InvalidDimensionsException;
+    double apply(Matrix output, Matrix correct) throws InvalidDimensionsException, InvalidDimensionsException;
 
 }

@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.math.functions;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 
 /**
@@ -9,7 +10,7 @@ public class SoftmaxRateCostFunction implements CostFunction {
 
 
     @Override
-    public double apply(Matrix output, Matrix correct) throws Matrix.InvalidDimensionsException {
+    public double apply(Matrix output, Matrix correct) throws InvalidDimensionsException {
 
         float[] ratings = new float[output.getWidth()];
 

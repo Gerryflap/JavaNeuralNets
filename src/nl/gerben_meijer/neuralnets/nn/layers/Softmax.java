@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.nn.layers;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.Function;
 
@@ -32,7 +33,7 @@ public class Softmax implements Layer{
         }
         try {
             return new Matrix(data);
-        } catch (Matrix.InvalidDimensionsException e) {
+        } catch (InvalidDimensionsException e) {
             e.printStackTrace();
             return null;
         }

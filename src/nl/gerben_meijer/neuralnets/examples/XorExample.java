@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.examples;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.MultiThreadMatrix;
 import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
@@ -16,7 +17,7 @@ import nl.gerben_meijer.neuralnets.nn.layers.Softmax;
  */
 public class XorExample {
 
-    public static void main(String[] args) throws Matrix.InvalidDimensionsException {
+    public static void main(String[] args) throws InvalidDimensionsException {
         NeuralNetwork nn = new NeuralNetwork();
 
         nn.addLayer(new FullyConnectedLayer(2, 3));

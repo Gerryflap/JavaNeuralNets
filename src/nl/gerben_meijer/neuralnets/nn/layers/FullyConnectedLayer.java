@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.nn.layers;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 
 import java.util.Collection;
@@ -23,12 +24,22 @@ public class FullyConnectedLayer implements Layer {
         biases = Matrix.initRandom(1, outputs);
     }
 
+    public FullyConnectedLayer (int inputs, int outputs, int constant) {
+        if (constant == 0) {
+            weights = new Matrix(inputs, outputs);
+            biases = new Matrix(1, outputs);
+        } else {
+            weights = new Matrix(inputs, outputs).mapFunction(x->constant);
+            biases = new Matrix(1, outputs).mapFunction(x->constant);
+        }
+    }
+
     @Override
     public Matrix forwardPass(Matrix input) {
         Matrix out = null;
         try {
             out = input.matmul(weights).addAsVector(biases);
-        } catch (Matrix.InvalidDimensionsException e) {
+        } catch (InvalidDimensionsException e) {
             e.printStackTrace();
         }
         return out;

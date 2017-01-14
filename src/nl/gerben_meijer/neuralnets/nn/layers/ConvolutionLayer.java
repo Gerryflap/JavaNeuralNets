@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.nn.layers;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 
 import java.util.Collection;
@@ -62,7 +63,7 @@ public class ConvolutionLayer implements Layer{
 
         try {
             return new Matrix(out);
-        } catch (Matrix.InvalidDimensionsException e) {
+        } catch (InvalidDimensionsException e) {
             e.printStackTrace();
             return null;
         }

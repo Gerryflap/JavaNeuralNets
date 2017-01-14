@@ -163,14 +163,6 @@ public class Matrix implements Serializable {
         return width;
     }
 
-    public class InvalidDimensionsException extends Exception {
-        public InvalidDimensionsException() {
-        }
-
-        public InvalidDimensionsException(String message) {
-            super(message);
-        }
-    }
 
     public String toString() {
         String out = "Matrix: \n";
@@ -221,4 +213,27 @@ public class Matrix implements Serializable {
         return new Matrix(newData);
      }
 
+    public float sum() {
+        float sum = 0;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                sum += data[i][j];
+            }
+        }
+        return sum;
+    }
+
+
+    public float max() {
+        float max = -Float.MAX_VALUE;
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (data[i][j] > max) {
+                    max = data[i][j];
+                }
+            }
+        }
+        return max;
+    }
 }
