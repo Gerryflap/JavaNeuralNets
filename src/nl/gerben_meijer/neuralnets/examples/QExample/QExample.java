@@ -6,7 +6,9 @@ import nl.gerben_meijer.neuralnets.ai.qlearning.QCostFunction;
 import nl.gerben_meijer.neuralnets.ai.qlearning.State;
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import nl.gerben_meijer.neuralnets.math.functions.ReLU;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
+import nl.gerben_meijer.neuralnets.math.functions.TanH;
 import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
 import nl.gerben_meijer.neuralnets.mulithreading.ThreadPool;
@@ -37,10 +39,10 @@ public class QExample {
 
         NeuralNetwork nn = new NeuralNetwork();
         nn.addLayer(new FullyConnectedLayer(SIZE*SIZE,5));
-        //nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
+        nn.addLayer(new ActivationFunctionLayer(new ReLU()));
 
         nn.addLayer(new FullyConnectedLayer(5,4));
-        nn.addLayer(new ActivationFunctionLayer(new Sigmoid()));
+        nn.addLayer(new ActivationFunctionLayer(new TanH()));
 
 
         nn.addLayer(new FullyConnectedLayer(4,4));

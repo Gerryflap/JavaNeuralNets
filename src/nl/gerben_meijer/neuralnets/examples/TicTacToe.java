@@ -2,8 +2,10 @@ package nl.gerben_meijer.neuralnets.examples;
 
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import nl.gerben_meijer.neuralnets.math.functions.ReLU;
 import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
 import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
+import nl.gerben_meijer.neuralnets.math.functions.TanH;
 import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.MomentumMultilearnRateOptimizer;
 import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
@@ -28,23 +30,23 @@ public class TicTacToe {
     public static void main(String[] args) {
         NeuralNetwork nn1 = new NeuralNetwork();
         nn1.addLayer(new FullyConnectedLayer(9, 9));
-        nn1.addLayer(new ActivationFunctionLayer(new Sigmoid()));
+        nn1.addLayer(new ActivationFunctionLayer(new ReLU()));
 
         nn1.addLayer(new FullyConnectedLayer(9, 9));
-        nn1.addLayer(new ActivationFunctionLayer(new Sigmoid()));
+        nn1.addLayer(new ActivationFunctionLayer(new TanH()));
 
         nn1.addLayer(new FullyConnectedLayer(9, 9));
         nn1.addLayer(new Softmax());
 
         NeuralNetwork nn2 = new NeuralNetwork();
         nn2.addLayer(new FullyConnectedLayer(9, 5));
-        nn2.addLayer(new ActivationFunctionLayer(new Sigmoid()));
+        nn2.addLayer(new ActivationFunctionLayer(new TanH()));
 
         nn2.addLayer(new FullyConnectedLayer(5, 9));
         nn2.addLayer(new Softmax());
 
-        MomentumMultilearnRateOptimizer optimizer1 = new MomentumMultilearnRateOptimizer(0.001f, nn1, new SoftmaxRateCostFunction());
-        GerbenOptimizer optimizer2 = new GerbenOptimizer(0.01f, nn2, new SoftmaxRateCostFunction());
+        GerbenOptimizer optimizer1 = new GerbenOptimizer(0.0001f, nn1, new SoftmaxRateCostFunction());
+        GerbenOptimizer optimizer2 = new GerbenOptimizer(0.001f, nn2, new SoftmaxRateCostFunction());
 
         Random random = new Random();
 

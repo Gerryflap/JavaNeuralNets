@@ -130,7 +130,7 @@ public class DeepQAgent {
         try {
             Matrix in = new Matrix(inpData).transpose();
             Matrix correct = new Matrix(correctData).transpose();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 1; i++) {
                 optimizer.optimize(in, correct);
             }
 
