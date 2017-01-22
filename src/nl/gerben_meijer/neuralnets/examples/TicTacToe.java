@@ -2,13 +2,8 @@ package nl.gerben_meijer.neuralnets.examples;
 
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
-import nl.gerben_meijer.neuralnets.math.functions.ReLU;
-import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
-import nl.gerben_meijer.neuralnets.math.functions.SoftmaxRateCostFunction;
-import nl.gerben_meijer.neuralnets.math.functions.TanH;
-import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.MomentumMultilearnRateOptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.MultilearnRateOptimizer;
+import nl.gerben_meijer.neuralnets.math.functions.*;
+import nl.gerben_meijer.neuralnets.math.optimize.*;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
@@ -29,13 +24,16 @@ public class TicTacToe {
 
     public static void main(String[] args) {
         NeuralNetwork nn1 = new NeuralNetwork();
-        nn1.addLayer(new FullyConnectedLayer(9, 9));
+        nn1.addLayer(new FullyConnectedLayer(9, 60, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
         nn1.addLayer(new ActivationFunctionLayer(new ReLU()));
 
-        nn1.addLayer(new FullyConnectedLayer(9, 9));
+        nn1.addLayer(new FullyConnectedLayer(60, 20, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
         nn1.addLayer(new ActivationFunctionLayer(new TanH()));
 
-        nn1.addLayer(new FullyConnectedLayer(9, 9));
+        nn1.addLayer(new FullyConnectedLayer(20, 10, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
+        nn1.addLayer(new ActivationFunctionLayer(new TanH()));
+
+        nn1.addLayer(new FullyConnectedLayer(10, 9, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
         nn1.addLayer(new Softmax());
 
         NeuralNetwork nn2 = new NeuralNetwork();
@@ -45,8 +43,8 @@ public class TicTacToe {
         nn2.addLayer(new FullyConnectedLayer(5, 9));
         nn2.addLayer(new Softmax());
 
-        GerbenOptimizer optimizer1 = new GerbenOptimizer(0.0001f, nn1, new SoftmaxRateCostFunction());
-        GerbenOptimizer optimizer2 = new GerbenOptimizer(0.001f, nn2, new SoftmaxRateCostFunction());
+        Optimizer optimizer1 = new IMMROptimizer(0.001f, 0.000001f, nn1, new SoftmaxRateCostFunction());
+        GerbenOptimizer optimizer2 = new GerbenOptimizer(0.001f, nn2, new SoftmaxLogCostFunction());
 
         Random random = new Random();
 
@@ -59,7 +57,7 @@ public class TicTacToe {
 
         while (true) {
             totalGames++;
-            boolean showGame = totalGames%1000 == 0;
+            boolean showGame = totalGames%100 == 0;
             int winner = 0;
             TicTacToe ticTacToe = new TicTacToe();
             int starting = random.nextInt(2) + 1;
@@ -84,7 +82,7 @@ public class TicTacToe {
                 int pos = 0;
 
                 for (int i = 0; i < 9; i++) {
-                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 100.0);
+                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 50.0);
                     //System.out.printf("%3f  ", v);
                     if (max < v && (ticTacToe.isFree(i) )){ //&& rnd && player == 2)) {
                         max = v;
@@ -147,6 +145,13 @@ public class TicTacToe {
 
             } catch (InvalidDimensionsException e) {
                 e.printStackTrace();
+            }
+
+            if (showGame) {
+                for (Matrix m :
+                        nn1.getFreeVariables()) {
+                    System.out.println(m);
+                }
             }
 
 
@@ -248,7 +253,7 @@ public class TicTacToe {
     }
 
     public Matrix getNormalizedBoard(int player) {
-        return getBoard().mapFunction(x -> x!=0?(x==player?1:-1):0);
+        return getBoard().mapFunction(x -> x!=0?(x==player?0.05f:-0.05f):0);
     }
 
 

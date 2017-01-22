@@ -8,6 +8,6 @@ public class TanH implements Function{
 
     @Override
     public float apply(float x) {
-        return (float) Math.tan(x);
+        return (float) Math.tanh(x);
     }
 }

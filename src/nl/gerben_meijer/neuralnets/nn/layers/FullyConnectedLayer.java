@@ -11,6 +11,7 @@ import java.util.LinkedList;
  */
 public class FullyConnectedLayer implements Layer {
 
+    public enum InitOption {GAUSSIAN, TANH_SCALED_RANDOM, SIGMOID_SCALED_GAUSSIAN, ZEROES}
     private Matrix weights;
     private Matrix biases;
 
@@ -20,8 +21,28 @@ public class FullyConnectedLayer implements Layer {
     }
 
     public FullyConnectedLayer (int inputs, int outputs) {
-        weights = Matrix.initRandom(inputs, outputs);
-        biases = Matrix.initRandom(1, outputs);
+        this(inputs, outputs, InitOption.TANH_SCALED_RANDOM);
+    }
+
+    public FullyConnectedLayer(int inputs, int outputs, InitOption initOption) {
+        switch (initOption) {
+            case GAUSSIAN:
+                weights = Matrix.initRandom(inputs, outputs);
+                biases = Matrix.initRandom(1, outputs);
+                break;
+            case TANH_SCALED_RANDOM:
+                weights = Matrix.initRandom(inputs, outputs, Math.sqrt(6f/(inputs + outputs)));
+                biases = Matrix.initRandom(1, outputs, Math.sqrt(6f/(inputs + outputs)));
+                break;
+            case SIGMOID_SCALED_GAUSSIAN:
+                weights = Matrix.initRandom(inputs, outputs, 4*Math.sqrt(6f/(inputs + outputs)));
+                biases = Matrix.initRandom(1, outputs, 4*Math.sqrt(6f/(inputs + outputs)));
+                break;
+            case ZEROES:
+                weights = new Matrix(inputs, outputs);
+                biases = new Matrix(1, outputs);
+                break;
+        }
     }
 
     public FullyConnectedLayer (int inputs, int outputs, int constant) {

@@ -28,10 +28,10 @@ public class QState implements State {
 
     @Override
     public float[] toNetworkInput() {
-        float[] out = new float[SIZE*SIZE];
-        out[x+y*SIZE] = 1;
+        //float[] out = new float[SIZE*SIZE];
+        //out[x+y*SIZE] = 1;
 
-        //float[] out = new float[]{x,y};
+        float[] out = new float[]{x,y};
         return out;
     }
 

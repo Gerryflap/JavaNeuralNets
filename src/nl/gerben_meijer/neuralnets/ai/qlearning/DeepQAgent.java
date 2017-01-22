@@ -106,8 +106,10 @@ public class DeepQAgent {
 
             replayMemory.add(new Matrix[]{input, correct});
 
-            if (random.nextInt(100) < replayMemory.size()) {
-                learnReplayRecord();
+            if (random.nextInt(30) < replayMemory.size()) {
+                for (int i = 0; i < 10; i++) {
+                    learnReplayRecord();
+                }
                 replayMemory.clear();
             }
 

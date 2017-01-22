@@ -15,6 +15,7 @@ import nl.gerben_meijer.neuralnets.mulithreading.ThreadPool;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
+import nl.gerben_meijer.neuralnets.nn.layers.Softmax;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +39,21 @@ public class QExample {
 
 
         NeuralNetwork nn = new NeuralNetwork();
-        nn.addLayer(new FullyConnectedLayer(SIZE*SIZE,5));
+        nn.addLayer(new FullyConnectedLayer(2,10));
         nn.addLayer(new ActivationFunctionLayer(new ReLU()));
+
+        nn.addLayer(new FullyConnectedLayer(10,5));
+        nn.addLayer(new ActivationFunctionLayer(new TanH()));
 
         nn.addLayer(new FullyConnectedLayer(5,4));
         nn.addLayer(new ActivationFunctionLayer(new TanH()));
 
 
         nn.addLayer(new FullyConnectedLayer(4,4));
+        //nn.addLayer(new ActivationFunctionLayer(new TanH()));
 
         DeepQAgent agent = new DeepQAgent(nn,
-                new GerbenOptimizer(0.0001f, nn, new QCostFunction()),
+                new IMMROptimizer(0.001f, 0.00001f, nn, new QCostFunction()),
                 new QState(0,0, 0, 0), POSSIBLE_ACTIONS,
                 0.8f,  0.1f);
 

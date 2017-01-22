@@ -236,4 +236,21 @@ public class Matrix implements Serializable {
         }
         return max;
     }
+
+    public static Matrix initRandom(int width, int height, double scale) {
+        Random random = new Random();
+        float[][] data = new float[height][width];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                data[j][i] = (float) ((random.nextFloat()*2-1) * scale);
+            }
+        }
+
+        try {
+            return new Matrix(data);
+        } catch (InvalidDimensionsException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
