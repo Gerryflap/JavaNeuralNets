@@ -39,7 +39,7 @@ public class QExample {
 
 
         NeuralNetwork nn = new NeuralNetwork();
-        nn.addLayer(new FullyConnectedLayer(2,10));
+        nn.addLayer(new FullyConnectedLayer(SIZE*SIZE,10));
         nn.addLayer(new ActivationFunctionLayer(new ReLU()));
 
         nn.addLayer(new FullyConnectedLayer(10,5));
@@ -70,7 +70,6 @@ public class QExample {
                 }
                 System.out.println();
             }
-
 
         }
 

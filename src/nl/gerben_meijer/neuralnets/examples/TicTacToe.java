@@ -24,13 +24,10 @@ public class TicTacToe {
 
     public static void main(String[] args) {
         NeuralNetwork nn1 = new NeuralNetwork();
-        nn1.addLayer(new FullyConnectedLayer(9, 60, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
+        nn1.addLayer(new FullyConnectedLayer(9, 120, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
         nn1.addLayer(new ActivationFunctionLayer(new ReLU()));
 
-        nn1.addLayer(new FullyConnectedLayer(60, 20, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
-        nn1.addLayer(new ActivationFunctionLayer(new TanH()));
-
-        nn1.addLayer(new FullyConnectedLayer(20, 10, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
+        nn1.addLayer(new FullyConnectedLayer(120, 10, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
         nn1.addLayer(new ActivationFunctionLayer(new TanH()));
 
         nn1.addLayer(new FullyConnectedLayer(10, 9, FullyConnectedLayer.InitOption.TANH_SCALED_RANDOM));
@@ -43,7 +40,7 @@ public class TicTacToe {
         nn2.addLayer(new FullyConnectedLayer(5, 9));
         nn2.addLayer(new Softmax());
 
-        Optimizer optimizer1 = new IMMROptimizer(0.001f, 0.000001f, nn1, new SoftmaxRateCostFunction());
+        Optimizer optimizer1 = new IMMROptimizer(0.001f, 0.000001f, nn1, new SoftmaxLogCostFunction());
         GerbenOptimizer optimizer2 = new GerbenOptimizer(0.001f, nn2, new SoftmaxLogCostFunction());
 
         Random random = new Random();
@@ -64,7 +61,7 @@ public class TicTacToe {
             int player = starting;
             //System.out.printf("Starting player = %d\n", player);
 
-            boolean rnd = random.nextBoolean();
+            boolean rnd = true;
 
             while (ticTacToe.getWinner() == 0 && !ticTacToe.isFull()) {
                 Matrix output;
@@ -82,7 +79,7 @@ public class TicTacToe {
                 int pos = 0;
 
                 for (int i = 0; i < 9; i++) {
-                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 50.0);
+                    float v = (float) (output.getValue(0, i) + random.nextGaussian() / 3000.0);
                     //System.out.printf("%3f  ", v);
                     if (max < v && (ticTacToe.isFree(i) )){ //&& rnd && player == 2)) {
                         max = v;
@@ -106,7 +103,7 @@ public class TicTacToe {
                 if (showGame) {
                     System.out.println(ticTacToe);
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

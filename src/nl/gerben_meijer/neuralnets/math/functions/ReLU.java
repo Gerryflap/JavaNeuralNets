@@ -6,6 +6,10 @@ package nl.gerben_meijer.neuralnets.math.functions;
 public class ReLU implements Function {
     @Override
     public float apply(float x) {
-        return Math.max(0, x);
+        if (x > 0) {
+            return x;
+        } else {
+            return 0.01f * x;
+        }
     }
 }
