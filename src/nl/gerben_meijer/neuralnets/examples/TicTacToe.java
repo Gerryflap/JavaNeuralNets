@@ -61,7 +61,7 @@ public class TicTacToe {
             int player = starting;
             //System.out.printf("Starting player = %d\n", player);
 
-            boolean rnd = true;
+            boolean rnd = random.nextBoolean();
 
             while (ticTacToe.getWinner() == 0 && !ticTacToe.isFull()) {
                 Matrix output;

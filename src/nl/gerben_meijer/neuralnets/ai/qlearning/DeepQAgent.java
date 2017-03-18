@@ -5,6 +5,7 @@ import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.optimize.*;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -24,7 +25,21 @@ public class DeepQAgent {
     private LinkedList<Matrix[]> replayMemory = new LinkedList<>();
     private float dropoff;
 
+    public DeepQAgent(String nnPath, Optimizer optimizer, State initialState, List<Action> possibleActions,
+                      float dropoff, float explorationChance) throws InvalidDimensionsException, IOException, ClassNotFoundException {
+
+        ObjectInputStream ooi = new ObjectInputStream(new FileInputStream(nnPath));
+        NeuralNetwork neuralNetwork = (NeuralNetwork) ooi.readObject();
+        init(neuralNetwork, optimizer, initialState, possibleActions, dropoff, explorationChance);
+    }
+
     public DeepQAgent(NeuralNetwork neuralNetwork, Optimizer optimizer, State initialState, List<Action> possibleActions,
+                      float dropoff, float explorationChance) throws InvalidDimensionsException {
+        init(neuralNetwork, optimizer, initialState, possibleActions, dropoff, explorationChance);
+
+    }
+
+    private void init(NeuralNetwork neuralNetwork, Optimizer optimizer, State initialState, List<Action> possibleActions,
                       float dropoff, float explorationChance) throws InvalidDimensionsException {
         currentState = initialState;
         this.possibleActions = new HashMap<>();
@@ -47,7 +62,7 @@ public class DeepQAgent {
                     String.format("Deep Q Agent expected a Neural network with output (%d, %d), got (%d, %d)\n",
                             possibleActions.size(), 1,
                             output.getHeight(), output.getWidth()
-                            )
+                    )
             );
         }
     }
@@ -64,31 +79,32 @@ public class DeepQAgent {
             float highestReward = -Float.MAX_VALUE;
             Matrix correct = new Matrix(output.getData().clone());
 
+
+            for (Action action :
+                    currentState.getPossibleActions()) {
+                int index = possibleActions.get(action);
+                float expectedReward = output.getValue(0, index);
+                if (expectedReward > highestReward) {
+                    bestAction = action;
+                    highestReward = expectedReward;
+                }
+                System.out.printf("Expected reward for %s: %f\n", action, expectedReward);
+
+            }
+
             if (random.nextFloat() < explorationChance) {
                 bestAction = currentState.getPossibleActions().get(random.nextInt(currentState.getPossibleActions().size()));
-            } else {
-
-                for (Action action :
-                        currentState.getPossibleActions()) {
-                    int index = possibleActions.get(action);
-                    float expectedReward = output.getValue(0, index);
-                    if (expectedReward > highestReward) {
-                        bestAction = action;
-                        highestReward = expectedReward;
-                    }
-                    System.out.printf("Expected reward for %s: %f\n", action, expectedReward);
-
-                }
             }
+
             State newState = currentState.applyAction(bestAction);
             float reward = bestAction.getReward() + newState.getReward();
-            System.out.printf("Reward1: %f\n", reward);
+            //System.out.printf("Reward1: %f\n", reward);
 
             Matrix nnout = neuralNetwork.forwardPass(
                     new Matrix(new float[][]{newState.toNetworkInput()})
                             .transpose());
             //System.out.println(nnout);
-            //System.out.println("Max: "+ nnout.max());
+            System.out.println("Max: "+ nnout.max());
 
             //Get best move from new state:
             float max = -Float.MAX_VALUE;
@@ -99,9 +115,24 @@ public class DeepQAgent {
                 }
             }
 
-            reward += dropoff * max;
-            System.out.printf("Reward2: %f\n", reward);
-            correct.setValue(0, possibleActions.get(bestAction), reward);
+            // Collect values:
+
+            double oldQValue = highestReward;
+            double discountFactor = dropoff;
+            double learnrate = 0.1;
+            double futureQEstimate = max;
+
+            // The Q-function:
+
+            System.out.printf("Values: \treward: %f, \tfutureQEstimate: %f, \toldQValue: %f\n",
+                    reward, futureQEstimate, oldQValue);
+
+            double learnValue = reward + discountFactor * futureQEstimate;
+            double delta = learnrate * (learnValue - oldQValue);
+            float newQValue = (float) (oldQValue + delta);
+
+            System.out.printf("Q-value update: %f\n", delta);
+            correct.setValue(0, possibleActions.get(bestAction), newQValue);
             System.out.println(correct);
 
             replayMemory.add(new Matrix[]{input, correct});
@@ -163,5 +194,11 @@ public class DeepQAgent {
             e.printStackTrace();
         }
         return Float.MAX_VALUE;
+    }
+
+    public void save(String path) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
+        oos.writeObject(this.neuralNetwork);
+        oos.close();
     }
 }

@@ -52,10 +52,10 @@ public class QState implements State {
 
 
         if (x == SIZE/2 && y == SIZE/2) {
-            return 100f;
+            return 1f;
 
         } else if ((x == SIZE-1 || x == 0) && (y == SIZE-1 || y == 0)) {
-            return -10f;
+            return -1f;
         } else {
             return 0;
         }

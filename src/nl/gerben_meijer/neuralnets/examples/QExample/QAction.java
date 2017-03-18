@@ -16,7 +16,7 @@ public class QAction implements Action {
 
     @Override
     public float getReward() {
-        return -0.1f;
+        return -0.01f;
     }
 
     public String toString() {

@@ -42,11 +42,8 @@ public class QExample {
         nn.addLayer(new FullyConnectedLayer(SIZE*SIZE,10));
         nn.addLayer(new ActivationFunctionLayer(new ReLU()));
 
-        nn.addLayer(new FullyConnectedLayer(10,5));
-        nn.addLayer(new ActivationFunctionLayer(new TanH()));
-
-        nn.addLayer(new FullyConnectedLayer(5,4));
-        nn.addLayer(new ActivationFunctionLayer(new TanH()));
+        nn.addLayer(new FullyConnectedLayer(10,4));
+        nn.addLayer(new ActivationFunctionLayer(new ReLU()));
 
 
         nn.addLayer(new FullyConnectedLayer(4,4));
@@ -59,6 +56,7 @@ public class QExample {
 
         while (true) {
             QAction actionDone = (QAction) agent.chooseAction();
+            //**
             QState agentState = (QState) agent.getState();
             System.out.printf("Agent chose (%d, %d), now at (%d, %d)\n",
                     actionDone.dx, actionDone.dy,
@@ -70,6 +68,8 @@ public class QExample {
                 }
                 System.out.println();
             }
+
+             //**/
 
         }
 
