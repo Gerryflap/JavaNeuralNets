@@ -8,13 +8,13 @@ import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 /**
  * Created by gerben on 23-12-16.
  */
-public class MomentumMultilearnRateOptimizer extends Optimizer {
+public class MovingMultiLearnRateOptimizer extends Optimizer {
 
     private float learningRate;
     private int[] learnRateCount = new int[3];
     private double originalLearningrate;
 
-    public MomentumMultilearnRateOptimizer(float learningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
+    public MovingMultiLearnRateOptimizer(float learningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
         this.learningRate = learningRate;
         this.neuralNetwork = neuralNetwork;
         this.costFunction = costFunction;

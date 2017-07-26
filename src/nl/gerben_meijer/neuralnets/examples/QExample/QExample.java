@@ -3,19 +3,12 @@ package nl.gerben_meijer.neuralnets.examples.QExample;
 import nl.gerben_meijer.neuralnets.ai.qlearning.Action;
 import nl.gerben_meijer.neuralnets.ai.qlearning.DeepQAgent;
 import nl.gerben_meijer.neuralnets.ai.qlearning.QCostFunction;
-import nl.gerben_meijer.neuralnets.ai.qlearning.State;
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
-import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.ReLU;
-import nl.gerben_meijer.neuralnets.math.functions.Sigmoid;
-import nl.gerben_meijer.neuralnets.math.functions.TanH;
-import nl.gerben_meijer.neuralnets.math.optimize.GerbenOptimizer;
-import nl.gerben_meijer.neuralnets.math.optimize.IMMROptimizer;
-import nl.gerben_meijer.neuralnets.mulithreading.ThreadPool;
+import nl.gerben_meijer.neuralnets.math.optimize.IMMLROptimizer;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
-import nl.gerben_meijer.neuralnets.nn.layers.Softmax;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +20,7 @@ import java.util.List;
  */
 public class QExample {
     public static final List<Action> POSSIBLE_ACTIONS = new ArrayList<Action>();
-    public static final int SIZE = 5;
+    public static final int SIZE = 7;
     static {
         POSSIBLE_ACTIONS.add(new QAction(1,0));
         POSSIBLE_ACTIONS.add(new QAction(-1,0));
@@ -50,7 +43,7 @@ public class QExample {
         //nn.addLayer(new ActivationFunctionLayer(new TanH()));
 
         DeepQAgent agent = new DeepQAgent(nn,
-                new IMMROptimizer(0.001f, 0.00001f, nn, new QCostFunction()),
+                new IMMLROptimizer(0.001f, 0.00001f, nn, new QCostFunction()),
                 new QState(0,0, 0, 0), POSSIBLE_ACTIONS,
                 0.8f,  0.1f);
 

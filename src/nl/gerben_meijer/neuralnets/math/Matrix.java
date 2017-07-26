@@ -192,6 +192,16 @@ public class Matrix implements Serializable {
         }
     }
 
+    public Matrix subMatrix(int xStart, int xEnd, int yStart, int yEnd) {
+        Matrix out = new Matrix(xEnd - xStart + 1, yEnd - yStart + 1);
+        for (int x = xStart; x <= xEnd; x++) {
+            for (int y = yStart; y <= yEnd; y++) {
+                out.setValue(x-xStart, y-yStart, getValue(x, y));
+            }
+        }
+        return out;
+    }
+
     public void setValue(int x, int y, float value) {
         data[y][x] = value;
     }

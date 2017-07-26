@@ -40,7 +40,7 @@ public class TicTacToe {
         nn2.addLayer(new FullyConnectedLayer(5, 9));
         nn2.addLayer(new Softmax());
 
-        Optimizer optimizer1 = new IMMROptimizer(0.001f, 0.000001f, nn1, new SoftmaxLogCostFunction());
+        Optimizer optimizer1 = new IMMLROptimizer(0.001f, 0.000001f, nn1, new SoftmaxLogCostFunction());
         GerbenOptimizer optimizer2 = new GerbenOptimizer(0.001f, nn2, new SoftmaxLogCostFunction());
 
         Random random = new Random();

@@ -9,17 +9,17 @@ import java.util.Iterator;
 
 /**
  * Created by gerben on 23-12-16.
- * Individual Momentum MultilearnRate Optimizer
+ * Individual Moving Multi LearnRate Optimizer
  *
  * Has an individual learnrate for every weight.
  */
-public class IMMROptimizer extends Optimizer{
+public class IMMLROptimizer extends Optimizer{
 
     private Matrix[] learningRates;
     private double maxLearningRate;
     private double minLearningRate;
 
-    public IMMROptimizer(float maxLearningRate, float minLearningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
+    public IMMLROptimizer(float maxLearningRate, float minLearningRate, NeuralNetwork neuralNetwork, CostFunction costFunction) {
         this.learningRates = new Matrix[neuralNetwork.getFreeVariables().size()];
         Iterator<Matrix> iterator = neuralNetwork.getFreeVariables().iterator();
         for (int i = 0; i < neuralNetwork.getFreeVariables().size(); i++) {
