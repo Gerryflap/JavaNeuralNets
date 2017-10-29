@@ -3,6 +3,7 @@ package nl.gerben_meijer.neuralnets.nn.layers;
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.functions.Function;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,16 @@ public class Softmax extends Layer{
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public Matrix backPropagate(Matrix input, Matrix error) throws InvalidDimensionsException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void updateVars(Matrix input, Matrix error) {
+
     }
 
     @Override

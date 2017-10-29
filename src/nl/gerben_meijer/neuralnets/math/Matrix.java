@@ -106,6 +106,23 @@ public class Matrix implements Serializable, NetworkInput {
         return new Matrix(newData);
     }
 
+    public Matrix multiply(Matrix m) throws InvalidDimensionsException {
+        if (this.width != m.width || this.height != m.height) {
+            throw new InvalidDimensionsException(String.format("Tried multiplying (element wise) matrices (%d, %d) and (%d, %d)",
+                    this.width, this.height,
+                    m.width, m.height));
+        }
+        float[][] newData = new float[this.height][this.width];
+
+        for (int i = 0; i < this.width; i++) {
+            for (int j = 0; j < this.height; j++) {
+                newData[j][i] = data[j][i] * m.getValue(i,j);
+            }
+        }
+
+        return new Matrix(newData);
+    }
+
     public Matrix addAsVector(Matrix m) throws InvalidDimensionsException {
         if (1 != m.width || this.height != m.height) {
             throw new InvalidDimensionsException(String.format("Tried vec-adding matrices (%d, %d) and (%d, %d)",

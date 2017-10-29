@@ -6,6 +6,7 @@ import nl.gerben_meijer.neuralnets.math.Sequence;
 import nl.gerben_meijer.neuralnets.math.functions.Function;
 import nl.gerben_meijer.neuralnets.math.functions.TanH;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -62,6 +63,16 @@ public class RNN extends Layer {
             }
         }
         return output;
+    }
+
+    @Override
+    public Matrix backPropagate(Matrix input, Matrix error) throws InvalidDimensionsException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void updateVars(Matrix input, Matrix error) {
+
     }
 
     @Override

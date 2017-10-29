@@ -1,5 +1,7 @@
 package nl.gerben_meijer.neuralnets.math.functions;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.io.Serializable;
 
 /**
@@ -9,4 +11,5 @@ import java.io.Serializable;
 public interface Function extends Serializable{
 
     float apply(float x);
+
 }

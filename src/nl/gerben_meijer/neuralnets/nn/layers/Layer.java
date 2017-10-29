@@ -1,5 +1,6 @@
 package nl.gerben_meijer.neuralnets.nn.layers;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.math.Sequence;
 
@@ -24,6 +25,10 @@ public abstract class Layer implements Serializable {
         }
         return out;
     }
+
+    public abstract Matrix backPropagate(Matrix input, Matrix error) throws InvalidDimensionsException;
+
+    public abstract void updateVars(Matrix input, Matrix error);
 
     /**
      * Collects all variables that can be changed by the optimizer

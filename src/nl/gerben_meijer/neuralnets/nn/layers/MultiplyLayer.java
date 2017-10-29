@@ -1,6 +1,8 @@
 package nl.gerben_meijer.neuralnets.nn.layers;
 
+import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -15,6 +17,16 @@ public class MultiplyLayer extends Layer{
     @Override
     public Matrix forwardPass(Matrix input) {
         return input.mapFunction(x -> mult.getValue(0,0) * x);
+    }
+
+    @Override
+    public Matrix backPropagate(Matrix input, Matrix error) throws InvalidDimensionsException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void updateVars(Matrix input, Matrix error) {
+        throw new NotImplementedException();
     }
 
     @Override

@@ -35,4 +35,29 @@ public abstract class CostFunction {
         }
     }
 
+    public double error(NetworkInput output, NetworkInput correct) throws InvalidDimensionsException {
+        if (output instanceof Matrix) {
+            return error((Matrix) output, (Matrix) correct);
+        } else {
+            return error((Sequence) output, (Sequence) correct);
+        }
+    }
+
+    public abstract double error(Matrix output, Matrix correct);
+
+    public double error(Sequence output, Sequence correct) throws InvalidDimensionsException {
+        Iterator<Matrix> iterator = output.getIterator();
+        Iterator<Matrix> correctIterator = correct.getIterator();
+        double totalError = 0;
+        while (iterator.hasNext()) {
+            Matrix cOutp = iterator.next();
+            Matrix cCorr = correctIterator.next();
+            totalError += error(cOutp, cCorr);
+        }
+        return totalError/output.size();
+    }
+
+
+
+
 }

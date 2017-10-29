@@ -3,6 +3,7 @@ package nl.gerben_meijer.neuralnets.nn.layers;
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -77,6 +78,16 @@ public class ConvolutionLayer extends Layer{
 
 
         return out;
+    }
+
+    @Override
+    public Matrix backPropagate(Matrix input, Matrix error) throws InvalidDimensionsException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void updateVars(Matrix input, Matrix error) {
+        throw new NotImplementedException();
     }
 
     @Override

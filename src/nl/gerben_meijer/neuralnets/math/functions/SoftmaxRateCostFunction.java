@@ -2,6 +2,7 @@ package nl.gerben_meijer.neuralnets.math.functions;
 
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by gerben on 23-12-16.
@@ -32,5 +33,10 @@ public class SoftmaxRateCostFunction extends CostFunction {
         }
 
         return sum/ratings.length;
+    }
+
+    @Override
+    public double error(Matrix output, Matrix correct) {
+        throw new NotImplementedException();
     }
 }

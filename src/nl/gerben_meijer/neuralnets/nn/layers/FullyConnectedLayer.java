@@ -67,6 +67,16 @@ public class FullyConnectedLayer extends Layer {
     }
 
     @Override
+    public Matrix backPropagate(Matrix input, Matrix error) throws InvalidDimensionsException {
+        return error.matmul(weights.transpose());
+    }
+
+    @Override
+    public void updateVars(Matrix input, Matrix error) {
+        //TODO: Actually implement this clusterfuck
+    }
+
+    @Override
     public Collection<Matrix> getFreeVariables() {
         Collection<Matrix> out = new LinkedList<>();
         out.add(weights);
