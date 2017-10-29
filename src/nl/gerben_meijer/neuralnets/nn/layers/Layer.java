@@ -1,21 +1,33 @@
 package nl.gerben_meijer.neuralnets.nn.layers;
 
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import nl.gerben_meijer.neuralnets.math.Sequence;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Created by gerben on 23-12-16.
  * Models a neural layer
  */
-public interface Layer extends Serializable {
+public abstract class Layer implements Serializable {
 
-    Matrix forwardPass(Matrix input);
+    public abstract Matrix forwardPass(Matrix input);
+
+    public Sequence forwardPass(Sequence input) {
+        Iterator<Matrix> iterator = input.getIterator();
+        Sequence out = new Sequence();
+        while (iterator.hasNext()) {
+            Matrix im = iterator.next();
+            out.addMatrix(forwardPass(im));
+        }
+        return out;
+    }
 
     /**
      * Collects all variables that can be changed by the optimizer
      * @return Collection of matrices that can be changed.
      */
-    Collection<Matrix> getFreeVariables();
+    public abstract Collection<Matrix> getFreeVariables();
 }

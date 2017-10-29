@@ -12,6 +12,8 @@ import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 import nl.gerben_meijer.neuralnets.nn.layers.ActivationFunctionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.ConvolutionLayer;
 import nl.gerben_meijer.neuralnets.nn.layers.FullyConnectedLayer;
+import nl.gerben_meijer.neuralnets.nn.layers.MTConvolutionLayer;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.Random;
 
@@ -23,13 +25,16 @@ public class ConvTest {
     public static void main(String[] args) throws InvalidDimensionsException {
         NeuralNetwork nn = new NeuralNetwork();
 
-        nn.addLayer(new ConvolutionLayer(3, 6, 10,10, 1));
+        nn.addLayer(new MTConvolutionLayer(3, 4, 10,10, 1));
         nn.addLayer(new ActivationFunctionLayer(new ReLU()));
 
-        nn.addLayer(new ConvolutionLayer(6, 4, 5,5, 3));
+        nn.addLayer(new MTConvolutionLayer(6, 4, 7,7, 3));
         nn.addLayer(new ActivationFunctionLayer(new ReLU()));
 
-        nn.addLayer(new FullyConnectedLayer(6*2*2, 5));
+        nn.addLayer(new MTConvolutionLayer(9, 4, 4,4, 6));
+        nn.addLayer(new ActivationFunctionLayer(new ReLU()));
+
+        nn.addLayer(new FullyConnectedLayer(9*1*1, 5));
         nn.addLayer(new ActivationFunctionLayer(new ReLU()));
 
         nn.addLayer(new FullyConnectedLayer(5, 2));
@@ -51,9 +56,11 @@ public class ConvTest {
         float lr = 0.3f;
         GerbenOptimizer optimizer = new GerbenOptimizer(lr, nn, f);
 
-        for (int i = 0; i < 300; i++) {
+
+        long time = System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
             if (i!=0 && i%10 == 0) {
-                lr/=1.5f;
+                lr/=1.1f;
                 optimizer.setLearningRate(lr);
                 System.out.println(nn.forwardPass(testX));
             }
@@ -65,7 +72,8 @@ public class ConvTest {
             System.out.printf("Iter: %d, Cost: %f\n", i, f.apply(nn.forwardPass(costX), costY));
 
         }
-
+        //38718
+        System.out.printf("Took %d ms\n",  System.currentTimeMillis() - time);
         System.out.println(nn.forwardPass(testX));
     }
 

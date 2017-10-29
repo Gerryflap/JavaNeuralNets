@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by gerben on 23-12-16.
  */
-public class ActivationFunctionLayer implements Layer{
+public class ActivationFunctionLayer extends Layer{
     private Function function;
 
     public ActivationFunctionLayer(Function function) {

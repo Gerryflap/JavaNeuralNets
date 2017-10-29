@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ThreadPool {
 
-    public static final int NUM_THREADS = 8;
+    public static final int NUM_THREADS = 20;
     private final List<Worker> freeThreads = new LinkedList<>();
     private final List<Worker> busyThreads = new LinkedList<>();
     private final List<Job> jobs = new LinkedList<>();
@@ -71,7 +71,10 @@ public class ThreadPool {
                 return true;
             }
         }
+    }
 
+    public int getNJobs() {
+        return jobs.size();
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.LinkedList;
  * Created by gerben on 23-12-16.
  * The softmax function
  */
-public class Softmax implements Layer{
+public class Softmax extends Layer{
     @Override
     public Matrix forwardPass(Matrix input) {
         input = input.mapFunction(x -> (float) Math.exp(x));

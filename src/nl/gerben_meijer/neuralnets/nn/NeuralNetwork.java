@@ -1,6 +1,8 @@
 package nl.gerben_meijer.neuralnets.nn;
 
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import nl.gerben_meijer.neuralnets.math.NetworkInput;
+import nl.gerben_meijer.neuralnets.math.Sequence;
 import nl.gerben_meijer.neuralnets.nn.layers.Layer;
 
 import java.io.Serializable;
@@ -28,6 +30,21 @@ public class NeuralNetwork implements Serializable{
             input = layer.forwardPass(input);
         }
         return input;
+    }
+
+    public Sequence forwardPass(Sequence input) {
+        for (Layer layer: layers) {
+            input = layer.forwardPass(input);
+        }
+        return input;
+    }
+
+    public NetworkInput forwardPass(NetworkInput input) {
+        if (input instanceof Matrix) {
+            return forwardPass((Matrix) input);
+        } else {
+            return forwardPass((Sequence) input);
+        }
     }
 
     public List<Layer> getLayers() {

@@ -9,7 +9,7 @@ import java.util.LinkedList;
 /**
  * Created by gerben on 23-12-16.
  */
-public class FullyConnectedLayer implements Layer {
+public class FullyConnectedLayer extends Layer {
 
     public enum InitOption {GAUSSIAN, TANH_SCALED_RANDOM, SIGMOID_SCALED_GAUSSIAN, ZEROES}
     private Matrix weights;

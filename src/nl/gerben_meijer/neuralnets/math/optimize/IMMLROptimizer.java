@@ -2,6 +2,7 @@ package nl.gerben_meijer.neuralnets.math.optimize;
 
 import nl.gerben_meijer.neuralnets.math.InvalidDimensionsException;
 import nl.gerben_meijer.neuralnets.math.Matrix;
+import nl.gerben_meijer.neuralnets.math.NetworkInput;
 import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 import nl.gerben_meijer.neuralnets.nn.NeuralNetwork;
 
@@ -32,7 +33,7 @@ public class IMMLROptimizer extends Optimizer{
         this.minLearningRate = minLearningRate;
     }
 
-    public void optimizeNN(Matrix inputBatch, Matrix correctBatch) throws InvalidDimensionsException {
+    public void optimizeNN(NetworkInput inputBatch, NetworkInput correctBatch) throws InvalidDimensionsException {
 
         Iterator<Matrix> iterator = neuralNetwork.getFreeVariables().iterator();
         for (int index = 0; index < neuralNetwork.getFreeVariables().size(); index++) {
@@ -75,9 +76,6 @@ public class IMMLROptimizer extends Optimizer{
 
     }
 
-    private float rateNetwork(Matrix input, Matrix correct) throws InvalidDimensionsException {
-        return (float) costFunction.apply(neuralNetwork.forwardPass(input), correct);
-    }
 
     public Matrix[] getLearningRates() {
         return learningRates;

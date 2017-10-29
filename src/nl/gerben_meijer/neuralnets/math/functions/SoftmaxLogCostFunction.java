@@ -6,7 +6,7 @@ import nl.gerben_meijer.neuralnets.math.Matrix;
 /**
  * Created by gerben on 23-12-16.
  */
-public class SoftmaxLogCostFunction implements CostFunction {
+public class SoftmaxLogCostFunction extends CostFunction {
 
 
     @Override

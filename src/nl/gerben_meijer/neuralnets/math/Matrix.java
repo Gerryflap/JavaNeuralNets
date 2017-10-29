@@ -9,7 +9,7 @@ import java.util.Random;
  * Created by gerben on 23-12-16.
  * Models a Matrix of floats
  */
-public class Matrix implements Serializable {
+public class Matrix implements Serializable, NetworkInput {
 
     protected float[][] data;
     protected int width;
@@ -247,6 +247,18 @@ public class Matrix implements Serializable {
         return max;
     }
 
+    public Matrix addAsRows(Matrix m) throws InvalidDimensionsException {
+        float[][] outputData = new float[height + m.getHeight()][];
+        for (int i = 0; i < outputData.length; i++) {
+            if (i < height) {
+                outputData[i] = data[i].clone();
+            } else {
+                outputData[i] = m.getData()[i - height].clone();
+            }
+        }
+        return new Matrix(outputData);
+    }
+
     public static Matrix initRandom(int width, int height, double scale) {
         Random random = new Random();
         float[][] data = new float[height][width];
@@ -262,5 +274,9 @@ public class Matrix implements Serializable {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public boolean sizeEquals(Matrix m) {
+        return m.getHeight() == height && m.getWidth() == width;
     }
 }

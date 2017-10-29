@@ -7,7 +7,7 @@ import nl.gerben_meijer.neuralnets.math.functions.CostFunction;
 /**
  * Created by gerben on 13-1-17.
  */
-public class QCostFunction implements CostFunction {
+public class QCostFunction extends CostFunction {
 
     @Override
     public double apply(Matrix output, Matrix correct) throws InvalidDimensionsException {

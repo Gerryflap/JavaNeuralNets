@@ -6,21 +6,18 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 /**
- * Created by gerben on 23-12-16.
+ * Created by gerben on 27-7-17.
+ * TODO: Implement
  */
-public class MultiplyLayer extends Layer{
-    private Matrix mult = new Matrix(1,1);
-
+public class MaxPool extends Layer {
 
     @Override
     public Matrix forwardPass(Matrix input) {
-        return input.mapFunction(x -> mult.getValue(0,0) * x);
+        return null;
     }
 
     @Override
     public Collection<Matrix> getFreeVariables() {
-        LinkedList<Matrix> out = new LinkedList<>();
-        out.add(mult);
-        return out;
+        return new LinkedList<>();
     }
 }
